@@ -1,6 +1,34 @@
 #include "LongNumber.h"
 
 /**
+ * Удаляет все ведущие нули и замыкающие лишние нули после запятой
+ */
+void LongNumber::delete_zeroes() {
+    long long start_index = 0;
+    for (int digit: digits) { // Delete starting zeroes
+        if (digit != 0) {
+            break;
+        }
+        ++start_index;
+        --exp;
+    }
+    unsigned long long end_index = digits.size() - 1;
+    while (true) { // Delete ending zeroes
+        if (end_index < exp + start_index || digits[end_index] != 0) {
+            break;
+        }
+        --end_index;
+        if (end_index == 0) {
+            break;
+        }
+    }
+    auto start = digits.begin() + start_index; // resize digits vector
+    auto end = digits.begin() + (long long) end_index + 1;
+    digits.resize(end - start);
+    copy(start, end, digits.begin());
+}
+
+/**
  * Строим длинное число с плавающей точкой из строки
  * @param s строка в виде числа с плавающей точкой
  * @return LongNumber
@@ -55,6 +83,7 @@ LongNumber::LongNumber(const std::string &s) {
             ++exp; // if already has a dot we don't need to increase by tan.
         }
     }
+    delete_zeroes(); // Delete extra zeroes
 }
 
 /**
@@ -75,7 +104,7 @@ std::string LongNumber::to_string() {
     }
 
     for (unsigned long long i = 0; i < digits.size(); ++i) {
-        s += std::to_string(digits[i]); // Append digit to string
+        s += std::to_string(digits[i]); // Append a digit to string
         if (exp != 0 && i == exp - 1) {
             s += ".";
         }
@@ -83,3 +112,40 @@ std::string LongNumber::to_string() {
 
     return s;
 }
+
+/**
+ * Умножает 2 числа типа LongNumber
+ * @return a*b
+ */
+LongNumber LongNumber::operator*(const LongNumber &long_number) const {
+    std::vector<int> res_digits(digits.size() + long_number.digits.size()); // new vector size
+    for (int &el: res_digits) {
+        el = 0;
+    }
+
+    size_t i = long_number.digits.size() - 1;
+    while (true) {
+        size_t j = digits.size() - 1;
+        while (true) {
+
+            res_digits[i + j + 1] += long_number.digits[i] * digits[j]; // multiply a digit[i] and another digit[i]
+            res_digits[i + j] += res_digits[i + j + 1] / 10; // if res >10 res/10 move to next ten
+            res_digits[i + j + 1] %= 10; // leave only res%10 in this ten
+
+            if (j == 0) {
+                break;
+            }
+            --j;
+        }
+
+        if (i == 0) {
+            break;
+        }
+        --i;
+    }
+
+    LongNumber res{res_digits, exp + long_number.exp, (short) (sgn * long_number.sgn)};
+    res.delete_zeroes(); // delete all zeroes if exist
+    return res;
+}
+
