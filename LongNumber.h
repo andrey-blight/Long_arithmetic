@@ -18,12 +18,14 @@ private:
 
     LongNumber(std::vector<int> digits, unsigned long long exp, short sgn) : digits(std::move(digits)), exp(exp),
                                                                              sgn(sgn) {}
+
     void delete_zeroes();
+
 public:
     explicit LongNumber(const std::string &s);
 
     std::string to_string();
-
+    LongNumber operator-() const;
     LongNumber operator*(const LongNumber &long_number) const;
 };
 

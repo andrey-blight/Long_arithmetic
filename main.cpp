@@ -8,6 +8,6 @@ int main() {
     double d = 465.975 * 971.1241;
     std::cout.setf(std::ios::fixed);
     std::cout.precision(10);
-    std::cout << (a * b).to_string() << std::endl;
+    std::cout << (-(-a)).to_string() << std::endl;
     std::cout << d;
 }

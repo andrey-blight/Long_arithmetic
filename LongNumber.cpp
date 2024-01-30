@@ -114,6 +114,14 @@ std::string LongNumber::to_string() {
 }
 
 /**
+ * Унарный минус для длинного числа, возвращает то же число умноженное на -1
+ * @return -a
+ */
+LongNumber LongNumber::operator-() const {
+    return {digits, exp, static_cast<short>(-sgn)};
+}
+
+/**
  * Умножает 2 числа типа LongNumber
  * @return a*b
  */
@@ -148,4 +156,3 @@ LongNumber LongNumber::operator*(const LongNumber &long_number) const {
     res.delete_zeroes(); // delete all zeroes if exist
     return res;
 }
-
