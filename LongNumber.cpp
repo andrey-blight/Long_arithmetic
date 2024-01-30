@@ -1,4 +1,5 @@
 #include "LongNumber.h"
+#include <algorithm>
 
 /**
  * Удаляет все ведущие нули и замыкающие лишние нули после запятой
@@ -115,6 +116,86 @@ std::string LongNumber::to_string() {
     }
 
     return s;
+}
+
+/**
+ * Оператор равно для двух длинных чисел
+ * @return a==b true/false
+ */
+bool LongNumber::operator==(const LongNumber &another) {
+    if (sgn != another.sgn) {
+        return false;
+    }
+    if (exp != another.exp) {
+        return false;
+    }
+    if (digits != another.digits) {
+        return false;
+    }
+    return true;
+}
+
+/**
+ * Оператор неравно для двух длинных чисел
+ * @return a!=b true/false
+ */
+bool LongNumber::operator!=(const LongNumber &another) {
+    return !(*this == another);
+}
+
+/**
+ * Оператор больше для двух длинных чисел
+ * @return a>b true/false
+ */
+bool LongNumber::operator>(const LongNumber &another) {
+    if (sgn != another.sgn) { // if numbers have different sign return sign(a) > sign(b)
+        return sgn > another.sgn;
+    }
+
+    if (exp != another.exp) {// Positive numbers have different exponents. So we can find more one.
+        if (sgn == 1) {
+            return exp > another.exp;
+        }
+        return exp < another.exp;
+    }
+
+    // check every digit by min len
+    for (int i = 0; i < std::min(digits.size(), another.digits.size()); ++i) {
+        if (digits[i] != another.digits[i]) {
+            if (sgn == 1) {
+                return digits[i] > another.digits[i];
+            }
+            return digits[i] < another.digits[i];
+        }
+    }
+
+    // if digits equal we check first more than second.
+    return digits.size() > another.digits.size();
+}
+
+/**
+ * Оператор меньше для двух длинных чисел
+ * @return a<b true/false
+ */
+bool LongNumber::operator<(const LongNumber &another) {
+    return !(*this > another || *this == another);
+}
+
+
+/**
+ * Оператор больше или равно для двух длинных чисел
+ * @return a>=b true/false
+ */
+bool LongNumber::operator>=(const LongNumber &another) {
+    return (*this == another || *this > another);
+}
+
+/**
+ * Оператор больше или равно для двух длинных чисел
+ * @return a<=b true/false
+ */
+bool LongNumber::operator<=(const LongNumber &another) {
+    return (*this == another || *this < another);
 }
 
 /**

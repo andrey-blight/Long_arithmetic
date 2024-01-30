@@ -25,7 +25,21 @@ public:
     explicit LongNumber(const std::string &s);
 
     std::string to_string();
+
+    bool operator==(const LongNumber &another);
+
+    bool operator!=(const LongNumber &another);
+
+    bool operator>(const LongNumber &another);
+
+    bool operator<(const LongNumber &another);
+
+    bool operator>=(const LongNumber &another);
+
+    bool operator<=(const LongNumber &another);
+
     LongNumber operator-() const;
+
     LongNumber operator*(const LongNumber &long_number) const;
 };
 
