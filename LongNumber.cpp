@@ -6,7 +6,7 @@
 void LongNumber::delete_zeroes() {
     long long start_index = 0;
     for (int digit: digits) { // Delete starting zeroes
-        if (digit != 0) {
+        if (digit != 0 || exp == 0) {
             break;
         }
         ++start_index;
@@ -26,6 +26,10 @@ void LongNumber::delete_zeroes() {
     auto end = digits.begin() + (long long) end_index + 1;
     digits.resize(end - start);
     copy(start, end, digits.begin());
+
+    if (digits.empty() && sgn == -1) { // make -0 to +0
+        sgn = 1;
+    }
 }
 
 /**
