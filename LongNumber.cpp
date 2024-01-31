@@ -5,6 +5,10 @@
  * Удаляет все ведущие нули и замыкающие лишние нули после запятой
  */
 void LongNumber::delete_zeroes() {
+    if (digits.empty()) {
+        exp = 0;
+        return;
+    }
     long long start_index = 0;
     for (int digit: digits) { // Delete starting zeroes
         if (digit != 0 || exp == 0) {
@@ -364,4 +368,52 @@ LongNumber LongNumber::operator*(const LongNumber &long_number) const {
     LongNumber res{res_digits, exp + long_number.exp, (short) (sgn * long_number.sgn)};
     res.delete_zeroes(); // delete all zeroes if exist
     return res;
+}
+
+LongNumber LongNumber::inverse() const {
+    if (digits.empty()) {
+        exit(1); // dividing by zero
+    }
+
+    LongNumber n = (*this);
+    n.sgn = 1; // work with plus numbers
+    LongNumber num("1");
+    unsigned long long res_exp = 1;
+    std::vector<int> res_digits;
+
+    while (n < num) { // multiply by 10 while n<1
+        ++n.exp;
+        n.digits.push_back(0);
+        ++res_exp;
+    }
+
+    while (num < n) { // multiply by 10 while num<n
+        ++num.exp;
+        num.digits.push_back(0);
+        res_digits.push_back(0);
+    }
+
+    LongNumber zero_check("0");
+    unsigned long long numbers = 0;
+    while (num != zero_check && numbers < 10) {
+        int digit_now = 0;
+
+        while (num >= n) {
+            ++digit_now;
+            num = num - n;
+        }
+
+        ++num.exp;
+        num.digits.push_back(0);
+        num.delete_zeroes();
+        res_digits.push_back(digit_now);
+        ++numbers;
+    }
+    LongNumber res(res_digits, res_exp, sgn);
+    res.delete_zeroes();
+    return res;
+}
+
+LongNumber LongNumber::operator/(const LongNumber &other) const {
+    return *this * other.inverse();
 }

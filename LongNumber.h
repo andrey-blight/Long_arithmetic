@@ -26,6 +26,8 @@ public:
 
     std::string to_string();
 
+    LongNumber inverse() const;
+
     bool operator==(const LongNumber &another) const;
 
     bool operator!=(const LongNumber &another) const;
@@ -45,6 +47,8 @@ public:
     LongNumber operator-(const LongNumber &other) const;
 
     LongNumber operator*(const LongNumber &long_number) const;
+
+    LongNumber operator/(const LongNumber &other) const;
 };
 
 #endif
