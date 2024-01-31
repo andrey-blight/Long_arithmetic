@@ -26,19 +26,23 @@ public:
 
     std::string to_string();
 
-    bool operator==(const LongNumber &another);
+    bool operator==(const LongNumber &another) const;
 
-    bool operator!=(const LongNumber &another);
+    bool operator!=(const LongNumber &another) const;
 
-    bool operator>(const LongNumber &another);
+    bool operator>(const LongNumber &another) const;
 
-    bool operator<(const LongNumber &another);
+    bool operator<(const LongNumber &another) const;
 
-    bool operator>=(const LongNumber &another);
+    bool operator>=(const LongNumber &another) const;
 
-    bool operator<=(const LongNumber &another);
+    bool operator<=(const LongNumber &another) const;
 
     LongNumber operator-() const;
+
+    LongNumber operator+(const LongNumber &other) const;
+
+    LongNumber operator-(const LongNumber &other) const;
 
     LongNumber operator*(const LongNumber &long_number) const;
 };

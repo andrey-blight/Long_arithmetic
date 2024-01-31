@@ -122,7 +122,7 @@ std::string LongNumber::to_string() {
  * Оператор равно для двух длинных чисел
  * @return a==b true/false
  */
-bool LongNumber::operator==(const LongNumber &another) {
+bool LongNumber::operator==(const LongNumber &another) const {
     if (sgn != another.sgn) {
         return false;
     }
@@ -139,7 +139,7 @@ bool LongNumber::operator==(const LongNumber &another) {
  * Оператор неравно для двух длинных чисел
  * @return a!=b true/false
  */
-bool LongNumber::operator!=(const LongNumber &another) {
+bool LongNumber::operator!=(const LongNumber &another) const {
     return !(*this == another);
 }
 
@@ -147,7 +147,7 @@ bool LongNumber::operator!=(const LongNumber &another) {
  * Оператор больше для двух длинных чисел
  * @return a>b true/false
  */
-bool LongNumber::operator>(const LongNumber &another) {
+bool LongNumber::operator>(const LongNumber &another) const {
     if (sgn != another.sgn) { // if numbers have different sign return sign(a) > sign(b)
         return sgn > another.sgn;
     }
@@ -177,7 +177,7 @@ bool LongNumber::operator>(const LongNumber &another) {
  * Оператор меньше для двух длинных чисел
  * @return a<b true/false
  */
-bool LongNumber::operator<(const LongNumber &another) {
+bool LongNumber::operator<(const LongNumber &another) const {
     return !(*this > another || *this == another);
 }
 
@@ -186,7 +186,7 @@ bool LongNumber::operator<(const LongNumber &another) {
  * Оператор больше или равно для двух длинных чисел
  * @return a>=b true/false
  */
-bool LongNumber::operator>=(const LongNumber &another) {
+bool LongNumber::operator>=(const LongNumber &another) const {
     return (*this == another || *this > another);
 }
 
@@ -194,7 +194,7 @@ bool LongNumber::operator>=(const LongNumber &another) {
  * Оператор больше или равно для двух длинных чисел
  * @return a<=b true/false
  */
-bool LongNumber::operator<=(const LongNumber &another) {
+bool LongNumber::operator<=(const LongNumber &another) const {
     return (*this == another || *this < another);
 }
 
@@ -204,6 +204,70 @@ bool LongNumber::operator<=(const LongNumber &another) {
  */
 LongNumber LongNumber::operator-() const {
     return {digits, exp, static_cast<short>(-sgn)};
+}
+
+LongNumber LongNumber::operator+(const LongNumber &other) const {
+    if (sgn != other.sgn) {
+        if (sgn == -1) {
+            return other - (-(*this));
+        } else {
+            return *this - (-other);
+        }
+    }
+
+    unsigned long long combined_exp = std::max(exp, other.exp);
+    unsigned long long combined_fractional = std::max(digits.size() - exp, other.digits.size() - other.exp);
+    std::vector<int> digits_1(combined_exp + combined_fractional);
+    std::vector<int> digits_2(combined_exp + combined_fractional);
+    std::vector<int> digits_res(combined_exp + combined_fractional + 1);
+    for (unsigned long long i = 0; i < combined_exp; ++i) { // aligning the tens
+        if (i < combined_exp - exp) {
+            digits_1[i] = 0;
+        } else {
+            digits_1[i] = digits[i - (combined_exp - exp)];
+        }
+        if (i < combined_exp - other.exp) {
+            digits_2[i] = 0;
+        } else {
+            digits_2[i] = other.digits[i - (combined_exp - other.exp)];
+        }
+        digits_res[i] = 0;
+    }
+
+    for (unsigned long long i = 0; i < combined_fractional; ++i) { // align the fractional part
+        if (exp + i >= digits.size()) {
+            digits_1[combined_exp + i] = 0;
+        } else {
+            digits_1[combined_exp + i] = digits[exp + i];
+        }
+        if (other.exp + i >= other.digits.size()) {
+            digits_2[combined_exp + i] = 0;
+        } else {
+            digits_2[combined_exp + i] = other.digits[other.exp + i];
+        }
+        digits_res[combined_exp + i] = 0;
+    }
+    digits_res[combined_exp + combined_fractional] = 0;
+
+    unsigned long long i = combined_exp + combined_fractional - 1;
+    while (true) {
+        digits_res[i + 1] += digits_1[i] + digits_2[i];
+        digits_res[i] += digits_res[i + 1] / 10;
+        digits_res[i + 1] %= 10;
+
+        if (i == 0) {
+            break;
+        }
+        --i;
+    }
+
+    LongNumber res(digits_res, combined_exp + 1, sgn);
+    res.delete_zeroes();
+    return res;
+}
+
+LongNumber LongNumber::operator-(const LongNumber &other) const {
+    return *this;
 }
 
 /**
