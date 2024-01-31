@@ -210,9 +210,8 @@ LongNumber LongNumber::operator+(const LongNumber &other) const {
     if (sgn != other.sgn) {
         if (sgn == -1) {
             return other - (-(*this));
-        } else {
-            return *this - (-other);
         }
+        return *this - (-other);
     }
 
     unsigned long long combined_exp = std::max(exp, other.exp);
@@ -267,7 +266,68 @@ LongNumber LongNumber::operator+(const LongNumber &other) const {
 }
 
 LongNumber LongNumber::operator-(const LongNumber &other) const {
-    return *this;
+    if (sgn != other.sgn) {
+        return *this + (-other);
+    }
+    if (sgn == -1 && other.sgn == -1) {
+        return (-other) - (-(*this));
+    }
+
+    unsigned long long combined_exp = std::max(exp, other.exp);
+    unsigned long long combined_fractional = std::max(digits.size() - exp, other.digits.size() - other.exp);
+    std::vector<int> digits_1(combined_exp + combined_fractional);
+    std::vector<int> digits_2(combined_exp + combined_fractional);
+    std::vector<int> digits_res(combined_exp + combined_fractional);
+    for (unsigned long long i = 0; i < combined_exp; ++i) { // aligning the tens
+        if (i < combined_exp - exp) {
+            digits_1[i] = 0;
+        } else {
+            digits_1[i] = digits[i - (combined_exp - exp)];
+        }
+        if (i < combined_exp - other.exp) {
+            digits_2[i] = 0;
+        } else {
+            digits_2[i] = other.digits[i - (combined_exp - other.exp)];
+        }
+        digits_res[i] = 0;
+    }
+
+    for (unsigned long long i = 0; i < combined_fractional; ++i) { // align the fractional part
+        if (exp + i >= digits.size()) {
+            digits_1[combined_exp + i] = 0;
+        } else {
+            digits_1[combined_exp + i] = digits[exp + i];
+        }
+        if (other.exp + i >= other.digits.size()) {
+            digits_2[combined_exp + i] = 0;
+        } else {
+            digits_2[combined_exp + i] = other.digits[other.exp + i];
+        }
+        digits_res[combined_exp + i] = 0;
+    }
+
+    bool first_more = *this > other;
+    unsigned long long i = combined_exp + combined_fractional - 1;
+    while (true) {
+        if (first_more) {
+            digits_res[i] += digits_1[i] - digits_2[i];
+        } else {
+            digits_res[i] += digits_2[i] - digits_1[i];
+        }
+        if (digits_res[i] < 0) {
+            digits_res[i - 1] -= 1;
+            digits_res[i] += 10;
+        }
+
+        if (i == 0) {
+            break;
+        }
+        --i;
+    }
+
+    LongNumber res(digits_res, combined_exp, first_more ? 1 : -1);
+    res.delete_zeroes();
+    return res;
 }
 
 /**
