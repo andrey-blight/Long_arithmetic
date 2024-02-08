@@ -19,6 +19,7 @@ private:
     LongNumber(std::vector<int> digits, unsigned long long exp, short sgn) : digits(std::move(digits)), exp(exp),
                                                                              sgn(sgn) {}
 
+
     void delete_zeroes();
 
 public:
@@ -50,5 +51,10 @@ public:
 
     LongNumber operator/(const LongNumber &other) const;
 };
+
+LongNumber operator ""_ln(const char *s) {
+    LongNumber res(s);
+    return res;
+}
 
 #endif

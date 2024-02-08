@@ -83,3 +83,4 @@ TEST(Long_arithmetic, divide) {
     LongNumber c("-3");
     EXPECT_EQ(a / b, c);
 }
+
