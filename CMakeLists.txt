@@ -1,10 +1,12 @@
 cmake_minimum_required(VERSION 3.8)
-project("Long_arithmetic")
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_EXTENSIONS OFF)
+project(Long_arithmetic)
+set(CMAKE_CXX_STANDARD 20)
 
-enable_testing()
-
+set(SOURCE_FILES main.cpp)
+add_executable(long_arithmetic_run ${SOURCE_FILES})
+include_directories(src)
 add_subdirectory(src)
+
+target_link_libraries(long_arithmetic_run long_arithmetic_src)
+
 add_subdirectory(test)

@@ -1,17 +1,11 @@
 #include <gtest/gtest.h>
 
-#include "../src/LongNumber.h"
+#include "LongNumber.h"
 
-
-/*  TEST - макрос, который задаёт имя группы тестов и имя теста
-    TEST(TestSuiteName, TestName) {
-      ... test body ...
-    }
-*/
 
 TEST(Long_arithmetic, delete_zeroes) {
     LongNumber a("0000.00010100000000");
-    EXPECT_EQ(a.to_string(), "0.000101");
+    EXPECT_EQ("+0.000101", a.to_string());
 }
 
 TEST(Long_arithmetic, inverse) {
@@ -83,7 +77,7 @@ TEST(Long_arithmetic, multiply) {
     EXPECT_EQ(a * b, c);
 }
 
-TEST(Long_arithmetic, multiply) {
+TEST(Long_arithmetic, divide) {
     LongNumber a("12");
     LongNumber b("-4");
     LongNumber c("-3");

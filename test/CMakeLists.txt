@@ -1,19 +1,7 @@
-include(FetchContent)
+project(long_arithmetic_test_project)
+add_subdirectory(googletest)
 
-FetchContent_Declare(
-        googletest
-        GIT_REPOSITORY https://github.com/google/googletest.git
-        GIT_TAG        release-1.11.0
-)
-FetchContent_MakeAvailable(googletest)
-add_library(GTest::GTest INTERFACE IMPORTED)
-target_link_libraries(GTest::GTest INTERFACE gtest_main)
+add_executable(long_arithmetic_test test.cpp)
 
-add_executable(multiply_test test.cpp)
-
-target_link_libraries(multiply_test
-        PRIVATE
-        GTest::GTest
-        multiply)
-
-add_test(multiply_gtests multiply_test)
+target_link_libraries(long_arithmetic_test long_arithmetic_src)
+target_link_libraries(long_arithmetic_test gtest gtest_main)
