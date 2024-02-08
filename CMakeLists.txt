@@ -4,9 +4,8 @@ set(CMAKE_CXX_STANDARD 20)
 
 set(SOURCE_FILES main.cpp)
 add_executable(long_arithmetic_run ${SOURCE_FILES})
-include_directories(src)
 add_subdirectory(src)
 
-target_link_libraries(long_arithmetic_run long_arithmetic_src)
+target_link_libraries(long_arithmetic_run PRIVATE long_arithmetic_src)
 
 add_subdirectory(test)
