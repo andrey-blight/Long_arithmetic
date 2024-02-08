@@ -1,0 +1,3 @@
+add_library(long_arithmetic LongNumber.cpp)
+
+target_include_directories(long_arithmetic PUBLIC include)

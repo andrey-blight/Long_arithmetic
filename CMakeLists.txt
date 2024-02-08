@@ -1,6 +1,10 @@
-cmake_minimum_required(VERSION 3.24)
-project(Long_arithmetic)
-
+cmake_minimum_required(VERSION 3.8)
+project("Long_arithmetic")
 set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
 
-add_executable(Long_arithmetic LongNumber.cpp main.cpp)
+enable_testing()
+
+add_subdirectory(src)
+add_subdirectory(test)
