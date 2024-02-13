@@ -1,8 +1,8 @@
 #include <gtest/gtest.h>
 
-#include "LongNumber.h"
+#include "../src/LongNumber.h"
 
-
+using namespace long_arithmetic;
 TEST(Long_arithmetic, delete_zeroes) {
     LongNumber a("0000.00010100000000");
     EXPECT_EQ("+0.000101", a.to_string());

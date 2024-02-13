@@ -16,7 +16,7 @@ namespace long_arithmetic {
         std::vector<int> digits;
         unsigned long long exp{};
         short sgn{};
-        unsigned long long accuracy = 100;
+        unsigned long long accuracy = 1000;
 
         LongNumber(std::vector<int> digits, unsigned long long exp, short sgn) : digits(std::move(digits)), exp(exp),
                                                                                  sgn(sgn) {}
