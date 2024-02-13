@@ -36,6 +36,17 @@ namespace long_arithmetic {
         if (digits.empty() && sgn == -1) { // make -0 to +0
             sgn = 1;
         }
+
+        if (accuracy > 0 && digits.size() - exp > accuracy) {
+            digits = std::vector<int>(digits.begin(), digits.begin() + (long) exp + (long) accuracy);
+        }
+    }
+
+    void LongNumber::set_accuracy(unsigned long long my_accuracy) {
+        accuracy = my_accuracy;
+        if (digits.size() - exp > accuracy) {
+            digits = std::vector<int>(digits.begin(), digits.begin() + (long) exp + (long) accuracy);
+        }
     }
 
 /**
@@ -266,6 +277,7 @@ namespace long_arithmetic {
         }
 
         LongNumber res(digits_res, combined_exp + 1, sgn);
+        res.set_accuracy(accuracy);
         res.delete_zeroes();
         return res;
     }
@@ -331,6 +343,7 @@ namespace long_arithmetic {
         }
 
         LongNumber res(digits_res, combined_exp, first_more ? 1 : -1);
+        res.set_accuracy(accuracy);
         res.delete_zeroes();
         return res;
     }
@@ -367,6 +380,7 @@ namespace long_arithmetic {
         }
 
         LongNumber res{res_digits, exp + long_number.exp, (short) (sgn * long_number.sgn)};
+        res.set_accuracy(accuracy);
         res.delete_zeroes(); // delete all zeroes if exist
         return res;
     }
@@ -396,7 +410,7 @@ namespace long_arithmetic {
 
         LongNumber zero_check("0");
         unsigned long long numbers = 0;
-        while (num != zero_check && numbers < 10) {
+        while (num != zero_check && numbers < accuracy) {
             int digit_now = 0;
 
             while (num >= n) {
@@ -411,12 +425,15 @@ namespace long_arithmetic {
             ++numbers;
         }
         LongNumber res(res_digits, res_exp, sgn);
+        res.set_accuracy(accuracy);
         res.delete_zeroes();
         return res;
     }
 
     LongNumber LongNumber::operator/(const LongNumber &other) const {
-        return *this * other.inverse();
+        LongNumber res = *this * other.inverse();
+        res.set_accuracy(accuracy);
+        return res;
     }
 
     LongNumber operator ""_ln(const char *s) {
