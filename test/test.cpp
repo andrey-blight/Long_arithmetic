@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 
-#include "../src/LongNumber.h"
+#include "../src/include/LongNumber.h"
 
 using namespace long_arithmetic;
 TEST(Long_arithmetic, delete_zeroes) {
