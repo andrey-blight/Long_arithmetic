@@ -353,6 +353,11 @@ namespace long_arithmetic {
  * @return a*b
  */
     LongNumber LongNumber::operator*(const LongNumber &long_number) const {
+        if (digits.empty() || long_number.digits.empty()) {
+            LongNumber res = 0_ln;
+            return res;
+        }
+
         std::vector<int> res_digits(digits.size() + long_number.digits.size()); // new vector size
         for (int &el: res_digits) {
             el = 0;
