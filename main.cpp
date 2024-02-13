@@ -53,7 +53,6 @@ LongNumber calculate_pi(unsigned long long accuracy) {
     ln_5.set_accuracy(accuracy);
     ln_239.set_accuracy(accuracy);
     ln_1.set_accuracy(accuracy);
-
     LongNumber first_arc = calculate_arctg(ln_1 / ln_5, accuracy);
     LongNumber second_arc = calculate_arctg(ln_1 / ln_239, accuracy);
     LongNumber pi = first_arc * 16_ln - 4_ln * second_arc;

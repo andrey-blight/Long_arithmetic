@@ -19,7 +19,7 @@ namespace long_arithmetic {
             --exp;
         }
         unsigned long long end_index = digits.size() - 1;
-        while (true) { // Delete ending zeroes
+        while (end_index != 0) { // Delete ending zeroes
             if (end_index < exp + start_index || digits[end_index] != 0) {
                 break;
             }
