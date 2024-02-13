@@ -66,6 +66,6 @@ LongNumber calculate_pi(unsigned long long accuracy) {
 }
 
 int main() {
-    LongNumber pi = calculate_pi(100);
+    LongNumber pi = calculate_arctg(1_ln/5_ln, 6);
     std::cout << pi.to_string();
 }
