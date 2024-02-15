@@ -120,10 +120,24 @@ TEST(Long_arithmetic, plus_1) {
     EXPECT_EQ(a + b, c);
 }
 
+TEST(Long_arithmetic, plus_2) {
+    LongNumber a("0.0001");
+    LongNumber b("0.004");
+    LongNumber c("0.0041");
+    EXPECT_EQ(a + b, c);
+}
+
 TEST(Long_arithmetic, minuse) {
     LongNumber a("4");
     LongNumber b("-4");
     LongNumber c("8");
+    EXPECT_EQ(a - b, c);
+}
+
+TEST(Long_arithmetic, minuse_1) {
+    LongNumber a("-4");
+    LongNumber b("-4");
+    LongNumber c("0");
     EXPECT_EQ(a - b, c);
 }
 
